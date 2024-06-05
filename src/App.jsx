@@ -2,11 +2,101 @@ import { useState } from 'react';
 import './App.css';
 import logo from './assets/federal-svg.svg';
 import menu from './assets/menu.svg';
+import editText from './assets/edit-svg.png';
+import deleteLogo from './assets/delete.svg';
+
+const UserCreationModal = ({ isOpen, onClose, onSubmit, user }) => {
+  if (!isOpen) return null;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const updatedUser = Object.fromEntries(formData.entries());
+    onSubmit(updatedUser);
+    onClose();
+  };
+
+  return (
+    <div className="modal-overlay">
+      <div className="modal">
+        <h2>{user ? 'Edit User' : 'Create User'}</h2>
+        <form className='user-form' onSubmit={handleSubmit}>
+          <label>
+            Name:
+            <input type="text" name="name" defaultValue={user ? user.name : ''} required />
+          </label>
+          <label>
+            Email:
+            <input type="email" name="email" defaultValue={user ? user.email : ''} required />
+          </label>
+          <label>
+            Username:
+            <input type="text" name="username" defaultValue={user ? user.username : ''} required />
+          </label>
+          <label>
+            Phone:
+            <input type="number" name="phone" defaultValue={user ? user.phone : ''} required />
+          </label>
+          <label>
+            Website:
+            <input type="text" name="website" defaultValue={user ? user.website : ''} required />
+          </label>
+          <div className='btn-container'>
+
+          <button className='submitBtn' type="submit">{user ? 'Update' : 'Submit'}</button>
+          <button className='closeBtn' type="button" onClick={onClose}>Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+const UserTable = ({ data, onDelete, onEdit }) => (
+  <table className='user-table'>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Username</th>
+        <th>Phone</th>
+        <th>Website</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {data.map(user => (
+        <tr key={user.id}>
+          <td>{user.id}</td>
+          <td>{user.name}</td>
+          <td>{user.email}</td>
+          <td>{user.username}</td>
+          <td>{user.phone}</td>
+          <td>{user.website}</td>
+          <td>
+          <div className='actionsBtn'>
+            <button className='editBtn' onClick={() => onEdit(user)}>
+              <img className='edit' src={editText} alt='edit' />
+            </button>
+            <button className='deleteBtn' onClick={() => onDelete(user.id)}>
+              <img className='delete' src={deleteLogo} alt='delete' />
+            </button>
+          </div>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+);
 
 function App() {
   const [page, setPage] = useState('home');
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [data, setData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState(null);
 
   const fetchData = (type) => {
     let url = '';
@@ -24,18 +114,24 @@ function App() {
       url = 'https://jsonplaceholder.typicode.com/users';
     }
 
+    if (searchQuery) {
+      url += `?q=${searchQuery}`;
+    }
+
     fetch(url)
       .then(response => response.json())
       .then(data => setData(data));
   };
 
   const renderPage = () => {
-    if (page === 'posts' || page === 'comments' || page === 'albums' || page === 'photos' || page === 'users' || page === 'todos') {
+    if (page === 'users') {
+      return <UserTable data={data} onDelete={handleDeleteUser} onEdit={handleEditUser} />;
+    } else if (['posts', 'comments', 'albums', 'photos', 'todos'].includes(page)) {
       return (
         <div className='content-box'>
           {data.map(item => (
             <div className='card' key={item.id}>
-              <h3>{page === 'posts' ? item.title : page === 'comments' ? item.name : page === 'albums' ? item.title : page === 'users' ? item.name : page === 'todos' ? item.title : item.title}</h3>
+              <h3>{page === 'posts' || page === 'albums' || page === 'todos' ? item.title : item.name}</h3>
               <p>{item.body}</p>
               {page === 'comments' && <p>Email: {item.email}</p>}
               <p>ID: {item.id}</p>
@@ -50,9 +146,27 @@ function App() {
           ))}
         </div>
       );
-    } else {
-      return <div className='content-box'>Welcome</div>;
     }
+  };
+
+  const handleUserCreation = (newUser) => {
+    if (editingUser) {
+      setData(data.map(user => (user.id === editingUser.id ? { ...user, ...newUser } : user)));
+      setEditingUser(null);
+    } else {
+      const newId = data.length ? Math.max(data.map(user => user.id)) + 1 : 1;
+      setData([...data, { ...newUser, id: newId }]);
+    }
+    setPage('users');
+  };
+
+  const handleDeleteUser = (id) => {
+    setData(data.filter(user => user.id !== id));
+  };
+
+  const handleEditUser = (user) => {
+    setEditingUser(user);
+    setIsModalOpen(true);
   };
 
   return (
@@ -83,15 +197,32 @@ function App() {
               </button>
             </div>
           </div>
+
           <button className='page-button' onClick={() => { setPage('posts'); fetchData('posts'); }}>POSTS</button>
           <button className='page-button' onClick={() => { setPage('comments'); fetchData('comments'); }}>COMMENTS</button>
           <button className='page-button' onClick={() => { setPage('albums'); fetchData('albums'); }}>ALBUMS</button>
           <button className='page-button' onClick={() => { setPage('photos'); fetchData('photos'); }}>PHOTOS</button>
           <button className='page-button' onClick={() => { setPage('todos'); fetchData('todos'); }}>TODOS</button>
           <button className='page-button' onClick={() => { setPage('users'); fetchData('users'); }}>USERS</button>
+          <button className='page-button' onClick={() => setIsModalOpen(true)}>CREATE USER</button>
         </div>
         {renderPage()}
       </div>
+      <div className='search-container'>
+        <input
+          type="text"
+          placeholder="Search"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-input"
+        />
+      </div>
+      <UserCreationModal 
+        isOpen={isModalOpen} 
+        onClose={() => { setIsModalOpen(false); setEditingUser(null); }} 
+        onSubmit={handleUserCreation} 
+        user={editingUser}
+      />
     </div>
   );
 }

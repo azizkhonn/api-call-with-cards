@@ -15,6 +15,7 @@ body {
   flex-direction: column;
 }
 
+
 .logo {
   width: 167px;
   height: 32px;
@@ -82,6 +83,7 @@ body {
   position: fixed;
   width: 100%;
   z-index: 9999;
+  
 }
 
 .navbar-logo img {
@@ -91,16 +93,20 @@ body {
 .navbar-links {
   display: flex;
   gap: 20px;
+  z-index: 9999;
+  position: relative;
 }
 
 .navbar-links a {
   color: white;
   text-decoration: none;
   font-size: 14px;
+  
 }
 
 .navbar-links a:hover {
   opacity: 0.8;
+  
 }
 
 .sidebar {
@@ -183,5 +189,178 @@ button:hover {
 
 .card p {
   margin: 5px 0;
+}
+
+.search-input {
+  font-weight: 500;
+  margin: 10px;
+  padding: 10px;
+  width: 35%;
+  border-radius: 25px;
+  outline: none;
+  border: 1px solid #007bff;
+}
+
+.search-container {
+  left: 0;
+  right: 0;
+  top: 40px;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  margin-top: -35px;
+  z-index: 9999;
+
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 400px;
+}
+
+.modal h2 {
+  margin-top: 0;
+}
+
+.modal form {
+
+  display: flex;
+  flex-direction: column;
+  padding: 8px 65px;
+}
+
+.modal form label {
+  margin-bottom: 10px;
+}
+
+.modal form input {
+  margin-bottom: 10px;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.modal form button {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.modal form button[type="submit"] {
+  background: #007bff;
+  color: white;
+  border: none;
+  margin-top: 10px;
+}
+
+.modal form button[type="button"] {
+  background: #6c757d;
+  color: white;
+  border: none;
+}
+
+.user-table {
+  border-collapse: collapse;
+  width: 80%;
+  margin-top: 100px;
+  margin-left: 270px;
+}
+
+table th,
+table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+}
+
+
+.modal-overlay {
+  margin-top: 60px;
+}
+
+
+input {
+  width: 100%;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+  outline: none;
+}
+
+
+.submitBtn {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.closeBtn {
+  border-radius: 5px;
+  width: 100%;
+}
+
+.btn-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+h2 {
+  text-align: center;
+  color: #007bff;
+}
+
+.editBtn {
+  color: #ffffff;
+  padding: 4px 6px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(80, 206, 80);
+  cursor: pointer;
+}
+
+.deleteBtn {
+  color: #ffffff;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 5px;
+  background-color: red;
+  cursor: pointer;
+  &:hover{
+    opacity: 0.7;
+  }
+}
+
+.actionsBtn{
+  justify-content: center;
+  display: flex;
+  gap: 15px;
+}
+
+.edit{
+  width: 27px;
+  height: 27px;
+}
+
+.delete{
+  width: 20px;
+  height: 20px;
+  
+}
+
+th{
+  color: #007bff;
 }
 
