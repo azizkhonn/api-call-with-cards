@@ -43,8 +43,8 @@ const UserCreationModal = ({ isOpen, onClose, onSubmit, user }) => {
           </label>
           <div className='btn-container'>
 
-          <button className='submitBtn' type="submit">{user ? 'Update' : 'Submit'}</button>
-          <button className='closeBtn' type="button" onClick={onClose}>Close</button>
+            <button className='submitBtn' type="submit">{user ? 'Update' : 'Submit'}</button>
+            <button className='closeBtn' type="button" onClick={onClose}>Close</button>
           </div>
         </form>
       </div>
@@ -75,14 +75,14 @@ const UserTable = ({ data, onDelete, onEdit }) => (
           <td>{user.phone}</td>
           <td>{user.website}</td>
           <td>
-          <div className='actionsBtn'>
-            <button className='editBtn' onClick={() => onEdit(user)}>
-              <img className='edit' src={editText} alt='edit' />
-            </button>
-            <button className='deleteBtn' onClick={() => onDelete(user.id)}>
-              <img className='delete' src={deleteLogo} alt='delete' />
-            </button>
-          </div>
+            <div className='actionsBtn'>
+              <button className='editBtn' onClick={() => onEdit(user)}>
+                <img className='edit' src={editText} alt='edit' />
+              </button>
+              <button className='deleteBtn' onClick={() => onDelete(user.id)}>
+                <img className='delete' src={deleteLogo} alt='delete' />
+              </button>
+            </div>
           </td>
         </tr>
       ))}
@@ -217,10 +217,10 @@ function App() {
           className="search-input"
         />
       </div>
-      <UserCreationModal 
-        isOpen={isModalOpen} 
-        onClose={() => { setIsModalOpen(false); setEditingUser(null); }} 
-        onSubmit={handleUserCreation} 
+      <UserCreationModal
+        isOpen={isModalOpen}
+        onClose={() => { setIsModalOpen(false); setEditingUser(null); }}
+        onSubmit={handleUserCreation}
         user={editingUser}
       />
     </div>

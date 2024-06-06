@@ -199,6 +199,7 @@ button:hover {
   border-radius: 25px;
   outline: none;
   border: 1px solid #007bff;
+  margin-top: -25px;
 }
 
 .search-container {
@@ -208,7 +209,6 @@ button:hover {
   position: fixed;
   display: flex;
   justify-content: center;
-  margin-top: -35px;
   z-index: 9999;
 
 }
