@@ -363,7 +363,7 @@ const darkTheme = createMuiTheme({
   palette: {
     type: 'dark',
     primary: {
-      main: '#fff',
+      main: '#007bff',
     },
     secondary: {
       main: '#ccc',
