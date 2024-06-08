@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
+import { createMuiTheme, ThemeProvider } from '@mui/material/styles';
 import {
   Button,
   TextField,
@@ -35,6 +36,7 @@ import logo from './assets/federal-svg.svg';
 import LoginPage from './LoginPage';
 import './App.css';
 
+
 const UserCreationModal = ({ isOpen, onClose, onSubmit, user }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -43,6 +45,8 @@ const UserCreationModal = ({ isOpen, onClose, onSubmit, user }) => {
     onSubmit(updatedUser);
     onClose();
   };
+
+
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
@@ -159,6 +163,10 @@ function App() {
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [theme, setTheme] = useState('light');
+  const toggleTheme = () => {
+    setTheme(theme === 'light'? 'dark' : 'light');
+  };
 
   useEffect(() => {
     if (page !== 'home') {
@@ -194,7 +202,7 @@ function App() {
       return <UserTable data={paginatedData} onDelete={handleDeleteUser} onEdit={handleEditUser} />;
     } else if (['posts', 'comments', 'albums', 'photos', 'todos'].includes(page)) {
       return (
-        <Container>
+        <Container sx={{ my: 13,ml: 30 }}>
           {paginatedData.map(item => (
             <Card key={item.id} sx={{ marginBottom: 2 }}>
               <CardContent>
@@ -278,6 +286,7 @@ function App() {
   }
 
   return (
+    <ThemeProvider theme={theme === 'light'? lightTheme : darkTheme}>
     <div className="App containerBOX">
       <AppBar position="fixed">
         <Toolbar>
@@ -290,6 +299,9 @@ function App() {
             <Button color="inherit" onClick={() => setPage('about')}>ABOUT</Button>
             <Button color="inherit" onClick={() => setPage('contact')}>CONTACT US</Button>
             <Button color="inherit" onClick={() => setPage('careers')}>CAREERS</Button>
+            <Button color="inherit" onClick={toggleTheme}>
+                {theme === 'light'? 'Dark Mode' : 'Light Mode'}
+              </Button>
           </div>
         </Toolbar>
       </AppBar>
@@ -332,7 +344,31 @@ function App() {
       </Snackbar>
       {renderPage()}
     </div>
+    </ThemeProvider>
   );
 }
+const lightTheme = createMuiTheme({
+  palette: {
+    type: 'light',
+    primary: {
+      main: '#333',
+    },
+    secondary: {
+      main: '#666',
+    },
+  },
+});
+
+const darkTheme = createMuiTheme({
+  palette: {
+    type: 'dark',
+    primary: {
+      main: '#fff',
+    },
+    secondary: {
+      main: '#ccc',
+    },
+  },
+});
 
 export default App;
